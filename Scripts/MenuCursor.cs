@@ -95,6 +95,15 @@ public sealed class MenuCursor
     /// </summary>
     public bool WrapToNextColumn { get; set; }
 
+    /// <summary>
+    /// When enabled, attempting downwards movement to a position >= <see cref="Length"/> will move the cursor to the final item,
+    /// instead of wrapping or doing nothing.
+    /// 
+    /// <br/><br/><b>Note</b>: this leads to asymmetric behavior with upward movemenr when both <see cref="WrapVertical"/> and
+    /// <see cref="WrapToNextColumn"/> are also enabled!
+    /// </summary>
+    public bool ClampDownwardToLength { get; set; }
+
     /* Public methods. */
     /// <summary>
     /// Moves the cursor one position to the right. Respects <see cref="WrapHorizontal"/> and <see cref="WrapToNextRow"/>.
@@ -161,7 +170,9 @@ public sealed class MenuCursor
     {
         if (Index + Width >= Length)
         {
-            if (WrapVertical)
+            if (ClampDownwardToLength && (!WrapVertical || Y < Height - 1))
+                Index = Length;
+            else if (WrapVertical)
             {
                 if (WrapToNextColumn)
                 {
