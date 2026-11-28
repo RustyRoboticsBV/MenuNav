@@ -3,7 +3,7 @@ using System;
 namespace Rusty.MenuNav;
 
 /// <summary>
-/// A 2D menu cursor controller. Supports horizontal and vertical movement, configurable wrapping and positioning by index or
+/// A 2D grid menu cursor controller. Supports horizontal and vertical movement, configurable wrapping and positioning by index or
 /// by grid coordinates.
 /// </summary>
 public sealed class MenuCursor
@@ -99,7 +99,7 @@ public sealed class MenuCursor
     /// When enabled, attempting downwards movement to a position >= <see cref="Length"/> will move the cursor to the final item,
     /// instead of wrapping or doing nothing.
     /// 
-    /// <br/><br/><b>Note</b>: this leads to asymmetric behavior with upward movemenr when both <see cref="WrapVertical"/> and
+    /// <br/><br/><b>Note</b>: this leads to asymmetric behavior with upward movement when both <see cref="WrapVertical"/> and
     /// <see cref="WrapToNextColumn"/> are also enabled!
     /// </summary>
     public bool ClampDownwardToLength { get; set; }
@@ -171,7 +171,7 @@ public sealed class MenuCursor
         if (Index + Width >= Length)
         {
             if (ClampDownwardToLength && (!WrapVertical || Y < Height - 1))
-                Index = Length;
+                Index = Length - 1;
             else if (WrapVertical)
             {
                 if (WrapToNextColumn)
